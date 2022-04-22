@@ -1,5 +1,18 @@
 ﻿public class Entity
 {
+    public Entity(Entity entity)
+    {
+        Id = entity.Id;
+        Type = entity.Type;
+        Position = entity.Position;
+        Trajectory = entity.Trajectory;
+        Health = entity.Health;
+        ShieldTimeLeft = entity.ShieldTimeLeft;
+        IsControlled = entity.IsControlled;
+        IsNearBase = entity.IsNearBase;
+        Threat = entity.Threat;
+    }
+
     public Entity(string[] inputs)
     {
         Id = int.Parse(inputs[0]);

@@ -32,16 +32,11 @@ class Player
             IEnumerable<Entity> entities = Enumerable.Range(0, int.Parse(Console.ReadLine()))
                 .Select(x => new Entity(Console.ReadLine().Split(' ')));
 
-            for (int i = 0; i < heroesPerPlayer; i++)
-            {
+            IEnumerable<PlayerHero> heroes = entities.Where(e => e.Type == EntityType.PlayerHero)
+                .Select(e => new PlayerHero(e));
 
-                // Write an action using Console.WriteLine()
-                // To debug: Console.Error.WriteLine("Debug messages...");
-
-
-                // In the first league: MOVE <x> <y> | WAIT; In later leagues: | SPELL <spellParams>;
-                Console.WriteLine("WAIT");
-            }
+            foreach (PlayerHero hero in heroes)
+                Console.WriteLine(hero.Action);
         }
     }
 }
