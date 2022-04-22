@@ -28,11 +28,10 @@ class Player
                 int health = int.Parse(inputs[0]); // Each player's base health
                 int mana = int.Parse(inputs[1]); // Ignore in the first league; Spend ten mana to cast a spell
             }
-            int entityCount = int.Parse(Console.ReadLine()); // Amount of heros and monsters you can see
-            for (int i = 0; i < entityCount; i++)
-            {
-                Entity entity = new Entity(Console.ReadLine().Split(' '));
-            }
+
+            IEnumerable<Entity> entities = Enumerable.Range(0, int.Parse(Console.ReadLine()))
+                .Select(x => new Entity(Console.ReadLine().Split(' ')));
+
             for (int i = 0; i < heroesPerPlayer; i++)
             {
 
