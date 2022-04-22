@@ -5,7 +5,11 @@ VisualStudioVersion = 17.1.32328.378
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{FAC03266-BF7D-4675-ACEC-C7E5F88FA626}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CGSpringChallenge2022", "CGSpringChallenge2022\CGSpringChallenge2022.csproj", "{0E640104-3EC1-43B1-B645-3901E1A62734}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CGSpringChallenge2022", "CGSpringChallenge2022\CGSpringChallenge2022.csproj", "{0E640104-3EC1-43B1-B645-3901E1A62734}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{59839A55-5C6F-43EC-BA11-845BBEF7D208}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CGSpringChallenge2022.UnitTests", "CGSpringChallenge2022.UnitTests\CGSpringChallenge2022.UnitTests.csproj", "{A35080F2-7339-4CBD-AAF2-B6D3528DAECB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,12 +21,17 @@ Global
 		{0E640104-3EC1-43B1-B645-3901E1A62734}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0E640104-3EC1-43B1-B645-3901E1A62734}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0E640104-3EC1-43B1-B645-3901E1A62734}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A35080F2-7339-4CBD-AAF2-B6D3528DAECB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A35080F2-7339-4CBD-AAF2-B6D3528DAECB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A35080F2-7339-4CBD-AAF2-B6D3528DAECB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A35080F2-7339-4CBD-AAF2-B6D3528DAECB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0E640104-3EC1-43B1-B645-3901E1A62734} = {FAC03266-BF7D-4675-ACEC-C7E5F88FA626}
+		{A35080F2-7339-4CBD-AAF2-B6D3528DAECB} = {59839A55-5C6F-43EC-BA11-845BBEF7D208}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {26656D31-009C-46D0-AA2C-201EB576F1F9}
