@@ -8,6 +8,7 @@ public class Game
     public Base PlayerBase { get; }
     public Base OpponentBase { get; }
     public IEnumerable<PlayerHero> Heroes { get; private set; }
+    public IEnumerable<Enemy> Enemies{ get; private set; }
 
     public Game()
     {
@@ -33,6 +34,9 @@ public class Game
 
         Heroes = entities.Where(e => e.Type == EntityType.PlayerHero)
             .Select(e => new PlayerHero(e));
+
+        Enemies = entities.Where(e => e.Type != EntityType.PlayerHero)
+            .Select(e => new Enemy(e));
     }
 
     public void Act()
