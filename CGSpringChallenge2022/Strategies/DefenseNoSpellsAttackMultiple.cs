@@ -15,7 +15,7 @@ namespace CGSpringChallenge2022.Strategies
         public void PerformActions()
         {
             List<PlayerHero> heroes = _game.GetPlayerHeroes().ToList();
-            List<Enemy> enemies = _game.GetEnemiesSortedByDistanceFromBase().ToList();
+            List<Monster> enemies = _game.GetEnemiesSortedByDistanceFromBase().ToList();
 
             if (!enemies.Any())
                 heroes.ForEach(h => h.Move(_game.PlayerBase));

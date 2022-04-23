@@ -15,7 +15,7 @@ namespace CGSpringChallenge2022.Strategies
         {
             foreach (PlayerHero hero in _game.GetPlayerHeroes())
             {
-                Enemy enemy = _game.GetEnemiesSortedByDistanceFromBase().FirstOrDefault();
+                Monster enemy = _game.GetEnemiesSortedByDistanceFromBase().FirstOrDefault();
                 if (enemy is null)
                     hero.Wait();
 

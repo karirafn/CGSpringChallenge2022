@@ -29,10 +29,10 @@ public class Game
 
     public void AddEntity(string[] inputs) => Entities.Add(new Entity(inputs));
     public IEnumerable<PlayerHero> GetPlayerHeroes() => Entities.Where(e => e.Type == EntityType.PlayerHero).Select(e => new PlayerHero(e));
-    public IEnumerable<Enemy> GetEnemies() => Entities.Where(e => e.Type != EntityType.PlayerHero).Select(e => new Enemy(e));
+    public IEnumerable<Monster> GetMonsters() => Entities.Where(e => e.Type == EntityType.Monster).Select(e => new Monster(e));
 
     public void Act(IStrategy strategy) => strategy.PerformActions();
 
-    public IEnumerable<Enemy> GetEnemiesSortedByDistanceFromBase()
-        => GetEnemies().OrderBy(e => e.Position.DistanceTo(PlayerBase));
+    public IEnumerable<Monster> GetEnemiesSortedByDistanceFromBase()
+        => GetMonsters().OrderBy(e => e.Position.DistanceTo(PlayerBase));
 }
