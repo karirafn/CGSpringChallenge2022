@@ -1,4 +1,4 @@
-﻿public class Entity
+﻿public class Entity : IPositionable
 {
     public Entity(Entity entity)
     {

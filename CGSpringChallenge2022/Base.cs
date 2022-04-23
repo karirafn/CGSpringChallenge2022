@@ -1,4 +1,4 @@
-﻿public class Base
+﻿public class Base : IPositionable
 {
     public Base(int x, int y)
     {

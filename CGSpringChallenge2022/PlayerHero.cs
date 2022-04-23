@@ -9,9 +9,9 @@
     public string Action { get; private set; } = WAIT;
     public Entity Entity { get; }
 
-    public void Move(Point point)
+    public void Move(IPositionable positionable)
     {
         if (!Action.Contains(MOVE))
-            Action = $"{MOVE} {point.X} {point.Y} | {WAIT}";
+            Action = $"{MOVE} {positionable.Position.X} {positionable.Position.Y} | {WAIT}";
     }
 }
