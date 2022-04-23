@@ -7,6 +7,7 @@ namespace CGSpringChallenge2022.UnitTests
     {
         public const int TEST_BASE_X = 5;
         public const int TEST_BASE_Y = 10;
+        public const int TEST_HERO_COUNT = 3;
 
         private int _x;
         private int _y;
@@ -21,7 +22,12 @@ namespace CGSpringChallenge2022.UnitTests
 
         public Game Build()
         {
-            Console.SetIn(new StringReader($"{_x} {_y}"));
+            string data = string.Join(Environment.NewLine, new[]
+            {
+                $"{_x} {_y}",
+                $"{TEST_HERO_COUNT}",
+            });
+            Console.SetIn(new StringReader(data));
             return new Game();
         }
     }
