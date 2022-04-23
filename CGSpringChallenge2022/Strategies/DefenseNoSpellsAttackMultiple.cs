@@ -3,11 +3,11 @@ using System.Linq;
 
 namespace CGSpringChallenge2022.Strategies
 {
-    public class DefenseNoSpellsAttackMultiple : IStrategy
+    public class DefenseNoSpellsAttackMultiple : StrategyBase, IStrategy
     {
         private readonly Game _game;
 
-        public DefenseNoSpellsAttackMultiple(Game game)
+        public DefenseNoSpellsAttackMultiple(Game game) : base(game)
         {
             _game = game;
         }
@@ -15,7 +15,7 @@ namespace CGSpringChallenge2022.Strategies
         public void PerformActions()
         {
             List<PlayerHero> heroes = _game.GetPlayerHeroes().ToList();
-            List<Monster> enemies = _game.GetEnemiesSortedByDistanceFromBase().ToList();
+            List<Monster> enemies = GetMonstersSortedByDistanceFromBase().ToList();
 
             if (!enemies.Any())
                 heroes.ForEach(h => h.Move(_game.PlayerBase));

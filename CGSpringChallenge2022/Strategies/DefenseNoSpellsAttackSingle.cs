@@ -2,11 +2,11 @@
 
 namespace CGSpringChallenge2022.Strategies
 {
-    public class DefenseNoSpellsAttackSingle : IStrategy
+    public class DefenseNoSpellsAttackSingle : StrategyBase, IStrategy
     {
         private readonly Game _game;
 
-        public DefenseNoSpellsAttackSingle(Game game)
+        public DefenseNoSpellsAttackSingle(Game game) : base(game)
         {
             _game = game;
         }
@@ -15,7 +15,7 @@ namespace CGSpringChallenge2022.Strategies
         {
             foreach (PlayerHero hero in _game.GetPlayerHeroes())
             {
-                Monster enemy = _game.GetEnemiesSortedByDistanceFromBase().FirstOrDefault();
+                Monster enemy = GetMonstersSortedByDistanceFromBase().FirstOrDefault();
                 if (enemy is null)
                     hero.Wait();
 
