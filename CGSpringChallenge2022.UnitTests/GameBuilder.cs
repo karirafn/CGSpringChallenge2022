@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-
-namespace CGSpringChallenge2022.UnitTests
+﻿namespace CGSpringChallenge2022.UnitTests
 {
     public class GameBuilder
     {
@@ -22,13 +19,8 @@ namespace CGSpringChallenge2022.UnitTests
 
         public Game Build()
         {
-            string data = string.Join(Environment.NewLine, new[]
-            {
-                $"{_x} {_y}",
-                $"{TEST_HERO_COUNT}",
-            });
-            Console.SetIn(new StringReader(data));
-            return new Game();
+            string[] data = $"{_x} {_y}".Split(' ');
+            return new Game(data, TEST_HERO_COUNT);
         }
     }
 }

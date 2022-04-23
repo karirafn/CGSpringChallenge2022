@@ -1,4 +1,7 @@
-﻿namespace CGSpringChallenge2022.UnitTests
+﻿using System;
+using System.IO;
+
+namespace CGSpringChallenge2022.UnitTests
 {
     public class EntityBuilder
     {
@@ -31,24 +34,36 @@
             _threat = TEST_THREAT;
         }
 
-        public Entity Build() => new Entity(new string[] { _id, _type, _x, _y, _shield, _isControlled, _health, _vx, _vy, _isNearBase, _threat });
+        public Entity Build()
+        {
+            string[] data = $"{_id} {_type} {_x} {_y} {_shield} {_isControlled} {_health} {_vx} {_vy} {_isNearBase} {_threat}".Split(' ');
+            return new Entity(data);
+        }
 
-        public void WithId(int id) => _id = id.ToString();
-        public void WithType(EntityType entityType) => _type = ((int)entityType).ToString();
-        public void WithPosition(Point position)
+        public EntityBuilder WithId(int id) => WithOption(() => _id = id.ToString());
+        public EntityBuilder WithType(EntityType entityType) => WithOption(() => _type = ((int)entityType).ToString());
+        public EntityBuilder WithPosition(Point position)
         {
             _x = position.X.ToString();
             _y = position.Y.ToString();
+            return this;
         }
-        public void WithShieldTimer(int timer) => _shield = timer.ToString();
-        public void WithControlled(bool isControlled) => _isControlled = isControlled ? "1" : "0";
-        public void WithHealth(int health) => _health = health.ToString();
-        public void WithTrajectory(Point trajectory)
+        public EntityBuilder WithShieldTimer(int timer) => WithOption(() => _shield = timer.ToString());
+        public EntityBuilder WithControlled(bool isControlled) => WithOption(() => _isControlled = isControlled ? "1" : "0");
+        public EntityBuilder WithHealth(int health) => WithOption(() => _health = health.ToString());
+        public EntityBuilder WithTrajectory(Point trajectory)
         {
             _vx = trajectory.X.ToString();
             _vy = trajectory.Y.ToString();
+            return this;
         }
-        public void WithNearBase(bool isNearBase) => _isNearBase = isNearBase ? "1" : "0";
-        public void WithThreat(ThreatType threat) => _threat = ((int)threat).ToString();
+        public EntityBuilder WithNearBase(bool isNearBase) => WithOption(() => _isNearBase = isNearBase ? "1" : "0");
+        public EntityBuilder WithThreat(ThreatType threat) => WithOption(() => _threat = ((int)threat).ToString());
+
+        private EntityBuilder WithOption(Action action)
+        {
+            action.Invoke();
+            return this;
+        }
     }
 }

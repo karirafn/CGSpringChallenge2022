@@ -1,7 +1,5 @@
-﻿using System;
-using System.IO;
-using System.Text;
-using System.Collections;
+﻿using CGSpringChallenge2022.Strategies;
+using System;
 
 /**
  * Auto-generated code below aims at helping you parse
@@ -11,13 +9,29 @@ class Player
 {
     static void Main(string[] args)
     {
-        Game game = new Game();
+        string[] inputs = Console.ReadLine().Split(' ');
+        int heroesPerPlayer = int.Parse(Console.ReadLine()); // Always 3
+        Game game = new Game(inputs, heroesPerPlayer);
+        IStrategy strategy = new MoveToEnemyClosestToBase(game);
+
         
         while (true)
         {
-            game.UpdateBases();
-            game.UpdateEntities();
-            game.Act();
+            for (int i = 0; i < 2; i++)
+            {
+                inputs = Console.ReadLine().Split(' ');
+                game.UpdateBase(i, inputs);
+            }
+
+            int entityCount = int.Parse(Console.ReadLine());
+            game.Entities.Clear();
+            for (int i = 0; i < entityCount; i++)
+            {
+                inputs = Console.ReadLine().Split(' ');
+                game.AddEntity(inputs);
+            }
+
+            game.Act(strategy);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿public class Entity : IPositionable
+﻿using System;
+
+public class Entity : IPositionable
 {
     public Entity(Entity entity)
     {
