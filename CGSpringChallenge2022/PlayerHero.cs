@@ -2,6 +2,8 @@
 
 public class PlayerHero : Entity
 {
+    public const int Visibility = 2200;
+
     private const string WAIT = nameof(WAIT);
     private const string MOVE = nameof(MOVE);
     private const string WIND = nameof(WIND);

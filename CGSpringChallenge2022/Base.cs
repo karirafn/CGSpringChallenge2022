@@ -1,5 +1,7 @@
 ﻿public class Base : IPositionable
 {
+    public const int Visibility = 6000;
+
     public Base(int x, int y)
     {
         Position = new Point(x, y);
