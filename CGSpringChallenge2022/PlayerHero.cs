@@ -10,12 +10,12 @@ public class PlayerHero : Entity
 
     public void Wait() => Console.WriteLine(WAIT);
 
-    public void Move(Point? destination)
+    public void Move(IPositionable? location)
     {
-        if (destination is null)
+        if (location is null)
             return;
 
-        Console.WriteLine($"{MOVE} {destination?.X} {destination?.Y}");
+        Console.WriteLine($"{MOVE} {location?.Position.X} {location?.Position.Y}");
     }
 
     public void Wind(Point? direction)

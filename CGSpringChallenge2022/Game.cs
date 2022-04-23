@@ -32,4 +32,7 @@ public class Game
     public IEnumerable<Enemy> GetEnemies() => Entities.Where(e => e.Type != EntityType.PlayerHero).Select(e => new Enemy(e));
 
     public void Act(IStrategy strategy) => strategy.PerformActions();
+
+    public IEnumerable<Enemy> GetEnemiesSortedByDistanceFromBase()
+        => GetEnemies().OrderBy(e => e.Position.DistanceTo(PlayerBase));
 }
