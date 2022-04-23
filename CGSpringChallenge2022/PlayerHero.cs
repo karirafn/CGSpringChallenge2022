@@ -3,6 +3,7 @@
 public class PlayerHero : Entity
 {
     public const int Visibility = 2200;
+    public const int WindRange = 1280;
 
     private const string WAIT = nameof(WAIT);
     private const string MOVE = nameof(MOVE);
