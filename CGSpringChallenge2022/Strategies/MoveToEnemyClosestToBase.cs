@@ -15,7 +15,10 @@ namespace CGSpringChallenge2022.Strategies
         {
             foreach (PlayerHero hero in _game.GetPlayerHeroes())
             {
-                var destination = _game.GetEnemies().OrderBy(e => e.Position.DistanceTo(_game.PlayerBase)).First().Position;
+                Point? destination = _game.GetEnemies().OrderBy(e => e.Position.DistanceTo(_game.PlayerBase)).FirstOrDefault()?.Position;
+                if (destination is null)
+                    hero.Wait();
+
                 hero.Move(destination);
             }
         }

@@ -7,5 +7,13 @@ public class PlayerHero : Entity
 
     public PlayerHero(Entity entity) : base(entity) { }
 
-    public void Move(Point destination) => Console.WriteLine(@$"{MOVE} {destination.X} {destination.Y} | {WAIT};");
+    public void Wait() => Console.WriteLine(WAIT);
+
+    public void Move(Point? destination)
+    {
+        if (destination is null)
+            return;
+
+        Console.WriteLine(@$"{MOVE} {destination?.X} {destination?.Y} | {WAIT};");
+    }
 }
