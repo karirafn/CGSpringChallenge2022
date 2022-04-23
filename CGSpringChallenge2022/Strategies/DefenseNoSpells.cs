@@ -2,11 +2,11 @@
 
 namespace CGSpringChallenge2022.Strategies
 {
-    public class MoveToEnemyClosestToBase : IStrategy
+    public class DefenseNoSpells : IStrategy
     {
         private readonly Game _game;
 
-        public MoveToEnemyClosestToBase(Game game)
+        public DefenseNoSpells(Game game)
         {
             _game = game;
         }

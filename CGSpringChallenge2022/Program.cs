@@ -12,7 +12,7 @@ class Player
         string[] inputs = Console.ReadLine().Split(' ');
         int heroesPerPlayer = int.Parse(Console.ReadLine()); // Always 3
         Game game = new Game(inputs, heroesPerPlayer);
-        IStrategy strategy = new MoveToEnemyClosestToBase(game);
+        IStrategy strategy = new DefenseNoSpells(game);
 
         
         while (true)
