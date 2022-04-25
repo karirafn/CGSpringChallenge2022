@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using CGSpringChallenge2022.Models;
+using System.Linq;
 
 namespace CGSpringChallenge2022.Strategies
 {
@@ -13,7 +14,7 @@ namespace CGSpringChallenge2022.Strategies
 
         public void PerformActions()
         {
-            foreach (PlayerHero hero in _game.GetPlayerHeroes())
+            foreach (PlayerHero hero in _game.PlayerHeroes)
             {
                 Monster enemy = GetMonstersSortedByDistanceFromBase().FirstOrDefault();
                 if (enemy is null)

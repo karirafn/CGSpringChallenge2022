@@ -1,18 +1,14 @@
 ﻿using CGSpringChallenge2022.Strategies;
 using System;
 
-/**
- * Auto-generated code below aims at helping you parse
- * the standard input according to the problem statement.
- **/
 class Player
 {
-    static void Main(string[] args)
+    static void Main()
     {
         string[] inputs = Console.ReadLine().Split(' ');
         int heroesPerPlayer = int.Parse(Console.ReadLine()); // Always 3
         Game game = new Game(inputs, heroesPerPlayer);
-        IStrategy strategy = new DefenseNoSpellsAttackMultiple(game);
+        IStrategy strategy = new DefenseWindSpellAttackSingle(game);
 
         
         while (true)
@@ -24,14 +20,14 @@ class Player
             }
 
             int entityCount = int.Parse(Console.ReadLine());
-            game.Entities.Clear();
+            game.ClearEntities();
             for (int i = 0; i < entityCount; i++)
             {
                 inputs = Console.ReadLine().Split(' ');
                 game.AddEntity(inputs);
             }
 
-            game.Act(strategy);
+            strategy.PerformActions();
         }
     }
 }

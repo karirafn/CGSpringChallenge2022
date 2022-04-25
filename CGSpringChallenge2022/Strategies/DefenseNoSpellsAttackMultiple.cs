@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using CGSpringChallenge2022.Models;
 using System.Linq;
 
 namespace CGSpringChallenge2022.Strategies
@@ -14,30 +14,32 @@ namespace CGSpringChallenge2022.Strategies
 
         public void PerformActions()
         {
-            List<PlayerHero> heroes = _game.GetPlayerHeroes().ToList();
-            List<Monster> enemies = GetMonstersSortedByDistanceFromBase().ToList();
+            PlayerHero[] heroes = _game.PlayerHeroes.ToArray();
+            Monster[] enemies = GetMonstersSortedByDistanceFromBase().ToArray();
+            int enemyCount = enemies.Count();
 
-            if (!enemies.Any())
-                heroes.ForEach(h => h.Move(_game.PlayerBase));
-
-            if (enemies.Count == 1)
-                heroes.ForEach(h => h.Move(enemies[0]));
-
-            if (enemies.Count == 2)
+            for (int i = 0; i < _game.HeroCount; i++)
             {
-                heroes[0].Move(enemies.First());
-                for (int i = 0; i < 2; i++)
+                PlayerHero hero = heroes[i];
+                if (!enemies.Any())
                 {
-                    heroes[i].Move(enemies[i]);
+                    MoveToStartingPosition(hero, i);
+                    continue;
                 }
-            }
 
-            if (enemies.Count > 2)
-            {
-                for (int i = 0; i < 3; i++)
+                if (enemyCount == 1)
                 {
-                    heroes[i].Move(enemies[i]);
+                    hero.Move(enemies[0]);
+                    continue;
                 }
+
+                if (enemyCount == 2 && i == 3)
+                {
+                    hero.Move(enemies[1]);
+                    continue;
+                }
+
+                hero.Move(enemies[i]);
             }
         }
     }
