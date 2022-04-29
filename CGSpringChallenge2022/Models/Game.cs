@@ -1,5 +1,4 @@
-﻿using CGSpringChallenge2022.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 public class Game
 {
@@ -72,4 +71,7 @@ public class Game
                 break;
         }
     }
+
+    public bool IsOnOpponentSide(ILocation location)
+            => (IsPlayerOne && MapCenter.X < location.Position.X) || (!IsPlayerOne && MapCenter.X > location.Position.X);
 }

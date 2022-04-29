@@ -11,8 +11,10 @@ public struct Point
     public int X { get; }
     public int Y { get; }
 
-    public double DistanceTo(ILocation p)
-        => Math.Sqrt(Math.Pow(p.Position.X - X, 2) + Math.Pow(p.Position.Y - Y, 2));
+    public double DistanceTo(ILocation location)
+        => location.Position.DistanceTo(this);
+    public double DistanceTo(Point point)
+        => Math.Sqrt(Math.Pow(point.X - X, 2) + Math.Pow(point.Y - Y, 2));
 
     public override bool Equals(object obj)
         => obj is Point point &&

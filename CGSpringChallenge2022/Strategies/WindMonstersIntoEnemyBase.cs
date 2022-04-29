@@ -1,7 +1,5 @@
-﻿using CGSpringChallenge2022.Models;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
-using static CGSpringChallenge2022.HeroAction;
 
 namespace CGSpringChallenge2022.Strategies
 {
@@ -9,110 +7,88 @@ namespace CGSpringChallenge2022.Strategies
     {
         public WindMonstersIntoEnemyBase(Game game) : base(game)
         {
+            HeroAction[0] = DefendAgainstMonsters;
+            HeroAction[1] = Attack;
+            HeroAction[2] = DefendAgainstMonsters;
         }
 
-        public void PerformActions()
+        private Func<bool>[] DefendAgainstMonsters(PlayerHero hero)
         {
-            PerformAction(() => Defend(Heroes[0]));
-            PerformAction(() => Attack(Heroes[1]));
-            PerformAction(() => Defend(Heroes[2]));
+            Monster[] windTargets = Game.Monsters
+                .Where(m => m.ShieldTimer == 0)
+                .Where(m => m.DistanceTo(hero) < WindSpell.Range)
+                .OrderBy(m => m.DistanceTo(hero))
+                .ToArray();
+
+            return new Func<bool>[]
+            {
+                () => hero.TryCastWind(windTargets.FirstOrDefault(), Game.OpponentBase, ref Mana)
+            }.Concat(BaseDefense(hero)).ToArray();
         }
 
-        private void Defend(PlayerHero hero)
+        private Func<bool>[] DefendAgainstOpponent(PlayerHero hero)
         {
             Hero opponent = Game.OpponentHeroes
-                .Where(h => !h.IsControlled)
-                .Where(h => h.DistanceTo(hero) < ControlSpell.Range)
+                .Where(hero => !hero.IsControlled)
+                .Where(hero => !Game.IsOnOpponentSide(hero))
+                .OrderBy(hero => hero.DistanceTo(Game.PlayerBase))
                 .FirstOrDefault();
 
+            return new Func<bool>[]
+            {
+                () => hero.TryCastWind(opponent, Game.OpponentBase, ref Mana),
+                () => hero.TryMove(opponent)
+            }.Concat(BaseDefense(hero)).ToArray();
+        }
+
+        private Func<bool>[] BaseDefense(PlayerHero hero)
+        {
             Monster shieldedTarget = Game.Monsters
                 .Where(m => m.ShieldTimer > 0)
                 .OrderBy(m => m.DistanceTo(Game.PlayerBase))
                 .FirstOrDefault();
 
-            IEnumerable<Monster> windTargets = Game.Monsters
-                .Where(m => m.ShieldTimer == 0)
-                .Where(m => m.DistanceTo(hero) < WindSpell.Range);
-
             Monster moveTarget = Game.Monsters
-                .OrderBy(e => e.DistanceTo(Game.PlayerBase))
-                .Where(m => m.DistanceTo(Game.PlayerBase) < Base.Visibility)
+                .OrderBy(m => m.DistanceTo(Game.PlayerBase))
                 .FirstOrDefault();
 
-            bool highAlert = moveTarget != null && moveTarget.DistanceTo(Game.PlayerBase) < 2000;
-
-            if (!highAlert && opponent != null)
+            return new Func<bool>[]
             {
-                hero.Control(opponent.Id, Game.OpponentBase);
-                Mana -= Spell.Cost;
-            }
-            else if (Mana > Spell.Cost && (opponent != null || windTargets.Count() > 2 || windTargets.Any(m => m.IsNearBase)))
-            {
-                hero.Wind(Game.OpponentBase);
-                Mana -= Spell.Cost;
-            }
-            else if (shieldedTarget != null)
-            {
-                hero.Move(shieldedTarget);
-            }
-            else if (moveTarget != null)
-            {
-                hero.Move(moveTarget);
-            }
-            else
-            {
-                MoveToStartingPosition(hero);
-            }
-
-            ActionsPerformed++;
+                () => hero.TryMove(shieldedTarget),
+                () => hero.TryMove(moveTarget),
+                () => hero.TryMove(GetStartingPosition(hero)),
+                () => hero.TryWait()
+            };
         }
 
-        private void Attack(PlayerHero hero)
+        private Func<bool>[] Attack(PlayerHero hero)
         {
-            Monster spellTarget = Game.Monsters
-                .Where(m => m.Threat != ThreatType.OpponentBase)
-                .Where(m => m.DistanceTo(hero) <= WindSpell.Range)
+            Monster controlTarget = Game.Monsters
+                .Where(m => !m.IsControlled)
+                .Where(m => m.Trajectory != Game.OpponentBase.Position)
+                .Where(m => m.Position.DistanceTo(hero) > Hero.Visibility/2)
+                .Where(m => m.Position.DistanceTo(Game.OpponentBase) < hero.Position.DistanceTo(Game.OpponentBase))
+                .Where(m => m.DistanceTo(hero) <= ControlSpell.Range)
                 .FirstOrDefault();
 
             Monster moveTarget = Game.Monsters
                 .Where(m => m.Threat != ThreatType.OpponentBase)
-                .Where(m => IsOnOpponentSide(m))
+                .Where(m => Game.IsOnOpponentSide(m))
                 .OrderBy(m => m.DistanceTo(Game.OpponentBase))
                 .FirstOrDefault();
 
-            System.Console.Error.WriteLine($"Is player one: {Game.IsPlayerOne}");
-            System.Console.Error.WriteLine($"Is on opponent half: {IsOnOpponentSide(hero)}");
-
-            if (!IsOnOpponentSide(hero))
+            return new Func<bool>[]
             {
-                hero.Move(new Point(Game.MapCenter.X + 10, Game.MapCenter.Y));
-            }
-            else if (Mana > Spell.Cost && spellTarget != null)
-            {
-                hero.Wind(Game.OpponentBase);
-                Mana -= Spell.Cost;
-            }
-            else if (moveTarget != null)
-            {
-                hero.Move(moveTarget);
-            }
-            else if (hero.Position != Game.MapCenter)
-            {
-                hero.Move(Game.MapCenter);
-            }
-            else if (Game.Monsters.Any())
-            {
-                hero.Move(Game.Monsters.OrderBy(m => m.DistanceTo(hero)).First());
-            }
-            else
-            {
-                hero.Wait();
-            }
-
-            ActionsPerformed++;
+                () => hero.TryMove(new Point(Game.MapCenter.X + 10, Game.MapCenter.Y), !Game.IsOnOpponentSide(hero)),
+                () => hero.TryCastControl(controlTarget, Game.OpponentBase, ref Mana),
+                () => hero.TryMove(moveTarget),
+                () => hero.TryMove(Game.MapCenter, hero.Position != Game.MapCenter),
+                () => hero.TryMove(Game.Monsters.OrderBy(m => m.DistanceTo(hero)).FirstOrDefault()),
+                () => hero.TryWait()
+            };
         }
 
-        private void Harvest(PlayerHero hero)
+        private Func<bool>[] Harvest(PlayerHero hero)
         {
             Monster monster = Game.Monsters
                 .Where(m => m.Position.DistanceTo(Game.PlayerBase) > Base.Visibility)
@@ -120,12 +96,12 @@ namespace CGSpringChallenge2022.Strategies
                 .OrderBy(m => m.Position.DistanceTo(hero))
                 .FirstOrDefault();
 
-            if (monster is null)
-                hero.Move(Game.MapCenter);
-            else
-                hero.Move(monster);
-
-            ActionsPerformed++;
+            return new Func<bool>[]
+            {
+                () => hero.TryMove(monster),
+                () => hero.TryMove(Game.MapCenter),
+                () => hero.TryWait()
+            };
         }
     }
 }
