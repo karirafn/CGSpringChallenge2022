@@ -1,4 +1,4 @@
-﻿public class Base : IPositionable
+﻿public class Base : ILocation
 {
     public const int Visibility = 6000;
 

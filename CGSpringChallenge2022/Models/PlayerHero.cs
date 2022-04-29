@@ -11,14 +11,17 @@ namespace CGSpringChallenge2022.Models
         public void Wait() => new WaitAction(Id).Act();
 
         public void Move(Point point) => new MoveAction($"{point.X} {point.Y}", Id).Act();
-        public void Move(IPositionable destination) => Move(destination.Position);
+        public void Move(ILocation destination) => Move(destination.Position);
 
         public void Wind(Point point) => new WindSpell($"{point.X} {point.Y}", Id).Act();
-        public void Wind(IPositionable direction) => Wind(direction.Position);
+        public void Wind(ILocation direction) => Wind(direction.Position);
 
         public void Shield(int targetId) => new WindSpell($"{targetId}", Id).Act();
 
-        public void Control(int targetId, Point point) => new WindSpell($"{targetId} {point.X} {point.Y}", Id).Act();
-        public void Control(int targetId, IPositionable destination) => Control(targetId, destination.Position);
+        public void Control(int targetId, Point point) => new ControlSpell($"{targetId} {point.X} {point.Y}", Id).Act();
+        public void Control(int targetId, ILocation destination) => Control(targetId, destination.Position);
+
+        public bool IsWithinRange(ILocation positionable, int range)
+            => Position.DistanceTo(positionable) <= range;
     }
 }

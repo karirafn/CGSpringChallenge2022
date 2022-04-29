@@ -1,4 +1,4 @@
-﻿public abstract class Entity : IPositionable
+﻿public abstract class Entity : ILocation
 {
     public Entity(int id, EntityType type, Point position, int shieldTimer, bool isControlled)
     {
@@ -14,4 +14,5 @@
     public Point Position { get; }
     public int ShieldTimer { get; }
     public bool IsControlled { get; }
+    public double DistanceTo(ILocation location) => Position.DistanceTo(location);
 }

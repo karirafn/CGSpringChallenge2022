@@ -16,8 +16,8 @@ namespace CGSpringChallenge2022.UnitTests
             // Assert
             game.PlayerBase.Position.X.Should().Be(GameBuilder.TEST_BASE_X);
             game.PlayerBase.Position.Y.Should().Be(GameBuilder.TEST_BASE_Y);
-            game.OpponentBase.Position.X.Should().Be(Game.MapSize.X - GameBuilder.TEST_BASE_X);
-            game.OpponentBase.Position.Y.Should().Be(Game.MapSize.Y - GameBuilder.TEST_BASE_Y);
+            game.OpponentBase.Position.X.Should().Be(Game.MapSizeX - GameBuilder.TEST_BASE_X);
+            game.OpponentBase.Position.Y.Should().Be(Game.MapSizeY - GameBuilder.TEST_BASE_Y);
             game.HeroCount.Should().Be(3);
         }
     }

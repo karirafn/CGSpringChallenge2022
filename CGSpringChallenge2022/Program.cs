@@ -6,11 +6,9 @@ class Player
     static void Main()
     {
         string[] inputs = Console.ReadLine().Split(' ');
-        int heroesPerPlayer = int.Parse(Console.ReadLine()); // Always 3
-        Game game = new Game(inputs, heroesPerPlayer);
-        IStrategy strategy = new DefenseWindSpellAttackSingle(game);
+        int heroCount = int.Parse(Console.ReadLine());
+        Game game = new Game(inputs, heroCount);
 
-        
         while (true)
         {
             for (int i = 0; i < 2; i++)
@@ -19,15 +17,15 @@ class Player
                 game.UpdateBase(i, inputs);
             }
 
-            int entityCount = int.Parse(Console.ReadLine());
             game.ClearEntities();
+            int entityCount = int.Parse(Console.ReadLine());
             for (int i = 0; i < entityCount; i++)
             {
                 inputs = Console.ReadLine().Split(' ');
                 game.AddEntity(inputs);
             }
 
-            strategy.PerformActions();
+            new WindMonstersIntoEnemyBase(game).PerformActions();
         }
     }
 }

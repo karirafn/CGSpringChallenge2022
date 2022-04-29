@@ -2,7 +2,12 @@
 
 namespace CGSpringChallenge2022
 {
-    public abstract class HeroAction
+    public interface IHeroAction
+    {
+        public void Act();
+    }
+
+    public class HeroAction : IHeroAction
     {
         private HeroAction(string name, string parameters, int heroId)
         {
@@ -15,13 +20,15 @@ namespace CGSpringChallenge2022
         public string Parameters { get; }
         public int HeroId { get; }
 
-        public void Act() => Console.WriteLine(string.IsNullOrEmpty(Parameters) ? $"{Name} {Name[0]}" : $"{Name} {Parameters} {Name[0]}{HeroId}");
+        public virtual void Act() => Console.WriteLine(string.IsNullOrEmpty(Parameters) ? $"{Name} {Name[0]}{HeroId}" : $"{Name} {Parameters} {Name[0]}{HeroId}");
 
-        public abstract class Spell : HeroAction
+        public class Spell : HeroAction
         {
             public const int Cost = 10;
 
             public Spell(string name, string parameters, int heroId) : base(name, parameters, heroId) { }
+
+            public override void Act() => Console.WriteLine($"SPELL {Name} {Parameters} {Name[0]}{HeroId}");
         }
 
         public class WaitAction : HeroAction
@@ -37,6 +44,7 @@ namespace CGSpringChallenge2022
         public class WindSpell : Spell
         {
             public const int Range = 1280;
+            public const int Push = 2200;
             public WindSpell(string parameters, int heroId) : base("WIND", parameters, heroId) { }
         }
 
