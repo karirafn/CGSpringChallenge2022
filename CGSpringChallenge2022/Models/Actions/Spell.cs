@@ -16,9 +16,12 @@ public abstract class Spell
     public int Cost { get; } = 10;
     public int Range { get; }
 
-    public bool TryCast(PlayerHero caster, Point target, ref int mana, bool condition)
+    public bool TryCast(PlayerHero caster, Entity target, ref int mana, bool condition)
+        => TryCast(ref mana, condition && caster.DistanceTo(target) <= Range);
+
+    public bool TryCast(ref int mana, bool condition)
     {
-        if (condition && mana >= Cost && caster.Position.DistanceTo(target) <= Range)
+        if (condition && mana >= Cost)
         {
             Console.WriteLine($"SPELL {Name} {Parameters} {Name[0]}{HeroId}");
             mana -= Cost;
