@@ -23,7 +23,7 @@ namespace CGSpringChallenge2022.Strategies
                 .Where(m => m.DistanceTo(Game.PlayerBase) <= Monster.AggroRange)
                 .Where(m => m.DistanceTo(hero) < WindSpell.Range);
 
-            return new Func<bool>[]
+            foreach (Monster monster in windTargets)
             {
                 () => hero.TryCastWind(windTargets.FirstOrDefault(), Game.OpponentBase, ref Mana),
                 () => hero.TryMove(threats.FirstOrDefault()),
