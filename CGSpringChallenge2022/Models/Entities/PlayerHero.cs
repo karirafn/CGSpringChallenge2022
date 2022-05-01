@@ -17,7 +17,7 @@
 
     public bool TryCastWind(Point point, ref int mana, bool condition = true)
         => new WindSpell($"{point.X} {point.Y}", Id)
-            .TryCast(this, point, ref mana, condition);
+            .TryCast(ref mana, condition);
 
     public bool TryCastWind(ILocation direction, ref int mana, bool condition = true)
         => TryCastWind(direction.Position, ref mana, condition);
@@ -27,11 +27,11 @@
 
     public bool TryCastShield(Entity target, ref int mana, bool condition = true)
         => target != null && new ShieldSpell($"{target.Id}", Id)
-            .TryCast(this, target.Position, ref mana, condition);
+            .TryCast(this, target, ref mana, condition);
 
     public bool TryCastControl(Entity target, Point destination, ref int mana, bool condition = true)
         => target != null && new ControlSpell($"{target.Id} {destination.X} {destination.Y}", Id)
-            .TryCast(this, target.Position, ref mana, condition);
+            .TryCast(this, target, ref mana, condition);
 
     public bool TryCastControl(Entity target, ILocation destination, ref int mana, bool condition = true)
         => TryCastControl(target, destination.Position, ref mana, condition);
