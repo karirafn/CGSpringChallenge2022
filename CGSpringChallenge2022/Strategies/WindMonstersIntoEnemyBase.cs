@@ -8,12 +8,12 @@ namespace CGSpringChallenge2022.Strategies
     {
         public WindMonstersIntoEnemyBase(Game game) : base(game)
         {
-            HeroAction[0] = DefendAgainstMonsters;
+            HeroAction[0] = Defend;
             HeroAction[1] = Attack;
-            HeroAction[2] = DefendAgainstMonsters;
+            HeroAction[2] = Attack;
         }
 
-        private Func<bool>[] DefendAgainstMonsters(PlayerHero hero)
+        private Func<bool>[] Defend(PlayerHero hero)
         {
             IEnumerable<Monster> threats = Game.Monsters
                 .OrderBy(m => m.DistanceTo(Game.PlayerBase));
@@ -23,8 +23,59 @@ namespace CGSpringChallenge2022.Strategies
                 .Where(m => m.DistanceTo(Game.PlayerBase) <= Monster.AggroRange)
                 .Where(m => m.DistanceTo(hero) < WindSpell.Range);
 
+            IEnumerable<Hero> nearbyOpponents = Game.OpponentHeroes
+                .Where(o => o.DistanceTo(Game.PlayerBase) <= Base.Visibility + Hero.Speed * 2);
+
+            bool opponentNearby = nearbyOpponents
+                .Any(o => o.DistanceTo(o) <= ControlSpell.Range + Hero.Speed);
+
+            Hero opponent = nearbyOpponents
+                .Where(o => threats.Any(t => t.DistanceTo(o) <= ShieldSpell.Range + Hero.Speed * 2))
+                .FirstOrDefault();
+
+            Monster imminentThreat = threats.FirstOrDefault(m => m.DistanceTo(Game.PlayerBase) < Monster.Speed * 10);
+
             return new Func<bool>[]
             {
+                () => hero.TryCastShield(hero, ref Mana, opponentNearby && hero.ShieldTimer == 0),
+                () => hero.TryCastWind(imminentThreat, Game.OpponentBase, ref Mana),
+                () => hero.TryMove(imminentThreat),
+                () => hero.TryCastControl(opponent, Game.OpponentBase, ref Mana),
+                () => hero.TryMove(opponent),
+                () => hero.TryCastWind(windTargets.FirstOrDefault(), Game.OpponentBase, ref Mana),
+                () => hero.TryMove(threats.FirstOrDefault()),
+                () => hero.TryMove(GetStartingPosition(hero)),
+                () => hero.TryWait(),
+            };
+        }
+
+        private Func<bool>[] DefendOpponent(PlayerHero hero)
+        {
+            IEnumerable<Monster> threats = Game.Monsters
+                .OrderBy(m => m.DistanceTo(Game.PlayerBase));
+
+            IEnumerable<Monster> windTargets = threats
+                .Where(m => m.ShieldTimer == 0)
+                .Where(m => m.DistanceTo(Game.PlayerBase) <= Monster.AggroRange)
+                .Where(m => m.DistanceTo(hero) < WindSpell.Range);
+
+            IEnumerable<Hero> nearbyOpponents = Game.OpponentHeroes
+                .Where(o => o.DistanceTo(Game.PlayerBase) <= Base.Visibility + Hero.Speed * 2);
+
+            bool opponentNearby = nearbyOpponents
+                .Any(o => o.DistanceTo(o) <= ControlSpell.Range + Hero.Speed);
+
+            Hero opponent = nearbyOpponents
+                .Where(o => threats.Any(t => t.DistanceTo(o) <= ShieldSpell.Range + Hero.Speed * 2))
+                .FirstOrDefault();
+
+            Monster imminentThreat = threats.FirstOrDefault(m => m.DistanceTo(Game.PlayerBase) < Monster.Speed * 10);
+
+            return new Func<bool>[]
+            {
+                () => hero.TryCastControl(opponent, Game.OpponentBase, ref Mana),
+                () => hero.TryCastShield(hero, ref Mana, opponentNearby && hero.ShieldTimer == 0),
+                () => hero.TryMove(opponent),
                 () => hero.TryCastWind(windTargets.FirstOrDefault(), Game.OpponentBase, ref Mana),
                 () => hero.TryMove(threats.FirstOrDefault()),
                 () => hero.TryMove(GetStartingPosition(hero)),
